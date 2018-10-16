@@ -11,7 +11,16 @@
         - lynx
       tags:
         - packages
+    - name: install httpd service
+      yum: pkg=httpd state=latest
+      tags:
+        - httpd
     - name: Verify that telnet was installed
       raw: yum list installed | grep telnet > /opt/pkg.log
       tags:
-        - logging
+        - always 
+      handlers:
+       - name: restart httpd service
+         service: name=httpd state=restarted
+         tags:
+         - restart
